@@ -12,8 +12,8 @@ with st.form("iep_form"):
     disability = st.selectbox("Primary Disability", ["SLD", "Autism", "ED", "ID", "Other Health Impairment", "Speech/Language", "Other"])
     goal_area = st.selectbox("Focus Area", ["Reading", "Math", "Writing", "Behavior", "Executive Function", "Social Skills"])
     specific_need = st.text_area("Describe the student's specific need")
-
-    # ✅ These need to stay inside the form
+    
+    # These need to stay inside the form
     common_accommodations = st.multiselect(
         "Select key accommodations (you can pick more than one):",
         [
@@ -30,6 +30,7 @@ with st.form("iep_form"):
     )
 
     custom_accommodation = st.text_input("Any additional accommodation(s)? (Optional)")
+    accuracy_input = st.text_input("Enter desired accuracy level (e.g., '80% in 4 out of 5 trials')")
 
     submitted = st.form_submit_button("Generate IEP Goal")
 
@@ -37,7 +38,7 @@ if submitted:
     st.success(f"Here's a drafted IEP goal for {student_name}:")
 
     end_date = (datetime.now() + timedelta(days=365)).strftime("%B %Y")
-    accuracy = "80% accuracy in 4 out of 5 trials"
+    accuracy = accuracy_input if accuracy_input else "80% accuracy in 4 out of 5 trials"
 
     all_accommodations = common_accommodations.copy()
     if custom_accommodation:
@@ -48,10 +49,10 @@ if submitted:
     goal = f"Given {accommodations_text}, {student_name} will demonstrate improved {goal_area.lower()} skills related to {specific_need.lower()}, with at least {accuracy}, by {end_date}."
 
     objectives = [
-        f"1. With teacher support, {student_name} will complete {goal_area.lower()} tasks addressing {specific_need.lower()} with {accuracy}.",
-        f"2. {student_name} will increase independence in {goal_area.lower()} tasks by using strategies (e.g., {accommodations_text}) across multiple settings.",
-        f"3. {student_name} will show progress on {goal_area.lower()} IEP benchmarks with reduced prompting over 6 weeks."
-    ]
+    f"1. With teacher support, {student_name} will complete {goal_area.lower()} tasks addressing {specific_need.lower()} with {accuracy}.",
+    f"2. {student_name} will complete {goal_area.lower()} tasks with reduced reliance on supports (e.g., {accommodations_text}) across instructional settings.",
+    f"3. {student_name} will show progress on {goal_area.lower()} IEP benchmarks with reduced prompting over 6 weeks."
+]
 
     st.markdown(f"**Goal:** {goal}")
     st.markdown("**Objectives:**")
